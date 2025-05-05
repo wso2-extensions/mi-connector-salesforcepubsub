@@ -1,0 +1,103 @@
+{
+    "connectorName": "pubsub",
+    "operationName": "publish",
+    "title": "Publish",
+    "help": "Publish",
+    "markdownDescription": "# Summary\n \n# Prerequisites\n\n# Input\n\n# Output\n\n# Error\n\n# Example\n\n# Notes\n\n",
+    "elements": [
+        {
+            "type": "attributeGroup",
+            "value": {
+                "groupName": "General",
+                "elements": [
+                    {
+                        "type": "attribute",
+                        "value": {
+                          "name": "configRef",
+                          "displayName": "Connection",
+                          "inputType": "connection",
+                          "allowedConnectionTypes": [
+                            "pubsub"
+                          ],
+                          "defaultType": "connection.pubsub",
+                          "defaultValue": "",
+                          "required": "true",
+                          "helpTip": "Connection to be used"
+                        }
+                    }
+                    ,{
+                        "type":"attributeGroup",
+                        "value":{
+                            "groupName": "Input Values",
+                            "elements":[
+                                    {
+                                        "type":"attribute",
+                                        "value":{
+                                            "name": "topic_name",
+                                            "displayName": "topic_name",
+                                            "inputType": "stringOrExpression",
+                                            "defaultValue": "",
+                                            "required": "true",
+                                            "helpTip": "topic_name"
+                                        }
+                                    },
+                                    {
+                                        "type":"attribute",
+                                        "value":{
+                                            "name": "events",
+                                            "displayName": "events",
+                                            "inputType": "stringOrExpression",
+                                            "defaultValue": "",
+                                            "required": "true",
+                                            "helpTip": "events"
+                                        }
+                                    },
+                                    {
+                                        "type":"attribute",
+                                        "value":{
+                                            "name": "auth_refresh",
+                                            "displayName": "auth_refresh",
+                                            "inputType": "stringOrExpression",
+                                            "defaultValue": "",
+                                            "required": "true",
+                                            "helpTip": "auth_refresh"
+                                        }
+                                    }
+                            ]
+                        }
+                    }
+                    ,{
+                        "type":"attributeGroup",
+                        "value":{
+                            "groupName": "Output",
+                            "elements":[
+                                {
+                                    "type":"attribute",
+                                    "value":{
+                                        "name": "responseVariable",
+                                        "displayName": "Output Variable Name",
+                                        "inputType": "string",
+                                        "deriveResponseVariable" : true,
+                                        "required": "true",
+                                        "helpTip": "Name of the variable to which the output of the operation should be assigned"
+                                    }
+                                },
+                                {
+                                    "type":"attribute",
+                                    "value":{
+                                        "name": "overwriteBody",
+                                        "displayName": "Replace Message Body",
+                                        "inputType": "checkbox",
+                                        "defaultValue": "false",
+                                        "helpTip": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable).",
+                                        "required": "false"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

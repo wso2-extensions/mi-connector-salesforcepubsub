@@ -1,0 +1,17 @@
+<template xmlns="http://ws.apache.org/ns/synapse" name="publish">
+    <parameter name="topic_name" description="The 'topic_name' field for grpc request"/>
+    <parameter name="events" description="The 'events' field for grpc request"/>
+    <parameter name="auth_refresh" description="The 'auth_refresh' field for grpc request"/>
+    <parameter name="responseVariable" description="The name of the variable to which the response should be stored."/>
+    <parameter name="overwriteBody" description="Replace the Message Body in Message Context with the response of the operation."/>
+    <sequence>
+    <!-- Possibly an In mediator or other mediators that read the inbound request -->
+        <!-- Initiate Connection -->
+
+    <class name="org.wso2.carbon.pubsubconnector.PublishMediator">
+        <property name="topic_name" expression="$func:topic_name"/>
+        <property name="events" expression="$func:events"/>
+        <property name="auth_refresh" expression="$func:auth_refresh"/>
+    </class>
+</sequence>
+</template>

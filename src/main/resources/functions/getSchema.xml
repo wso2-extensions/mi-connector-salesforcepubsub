@@ -1,0 +1,13 @@
+<template xmlns="http://ws.apache.org/ns/synapse" name="getSchema">
+    <parameter name="schema_id" description="The 'schema_id' field for grpc request"/>
+    <parameter name="responseVariable" description="The name of the variable to which the response should be stored."/>
+    <parameter name="overwriteBody" description="Replace the Message Body in Message Context with the response of the operation."/>
+    <sequence>
+    <!-- Possibly an In mediator or other mediators that read the inbound request -->
+        <!-- Initiate Connection -->
+
+    <class name="org.wso2.carbon.pubsubconnector.GetSchemaMediator">
+        <property name="schema_id" expression="$func:schema_id"/>
+    </class>
+</sequence>
+</template>
