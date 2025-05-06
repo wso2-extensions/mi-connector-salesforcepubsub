@@ -16,16 +16,15 @@
  *  under the License.
  */
 
-package org.wso2.carbon.sfpubsubconnector;
+package org.wso2.integration.salesforcepubsub;
 
 import com.salesforce.eventbus.protobuf.PubSubProto;
 import com.salesforce.eventbus.protobuf.PubSubGrpc;
-import com.salesforce.eventbus.protobuf.PublishRequest;
-import com.salesforce.eventbus.protobuf.PublishResponse;
+import com.salesforce.eventbus.protobuf.TopicRequest;
+import com.salesforce.eventbus.protobuf.TopicInfo;
 
 import com.google.gson.Gson;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,10 +38,8 @@ import org.wso2.carbon.connector.core.AbstractConnector;
 
 import static java.lang.String.format;
 
-public class PublishMediator extends AbstractConnector {
+public class GetTopicMediator extends AbstractConnector {
     private String topic_name;
-    private com.salesforce.eventbus.protobuf.ProducerEvent[] events;
-    private String auth_refresh;
 
     public void setTopic_name(String topic_name) {
         this.topic_name = topic_name;
@@ -52,43 +49,24 @@ public class PublishMediator extends AbstractConnector {
         return topic_name;
     }
 
-    public void setEvents(String events) {
-        this.events = (com.salesforce.eventbus.protobuf.ProducerEvent[]) TypeConverter.convert(events, com.salesforce.eventbus.protobuf.ProducerEvent[].class);
-    }
-
-    public com.salesforce.eventbus.protobuf.ProducerEvent[] getEvents() {
-        return events;
-    }
-
-    public void setAuth_refresh(String auth_refresh) {
-        if (auth_refresh == null) {
-            auth_refresh = null;
-        }
-        this.auth_refresh = auth_refresh;
-    }
-
-    public String getAuth_refresh() {
-        return auth_refresh;
-    }
-
     @Override
     public void connect(MessageContext context) {
         try {
-            PublishRequest.Builder requestBuilder = PublishRequest.newBuilder()
+
+            TopicRequest request = TopicRequest.newBuilder()
                     .setTopicName(topic_name)
-                    .addAllEvents(Arrays.asList(events));
-            if (auth_refresh != null) {
-                requestBuilder.setAuthRefresh(auth_refresh);
-            }
-            PublishRequest request = requestBuilder.build();
+                    .build();
 
             com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub stub = (com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub) context.getProperty("stub");
 
-            PublishResponse response = stub.publish(request);
+            TopicInfo response = stub.getTopic(request);
             Map<String, Object> map = new HashMap<>();
+            map.put("tenant_guid", response.getTenantGuid());
+            map.put("can_publish", response.getCanPublish());
             map.put("rpc_id", response.getRpcId());
+            map.put("topic_name", response.getTopicName());
             map.put("schema_id", response.getSchemaId());
-            map.put("results", response.getResultsList());
+            map.put("can_subscribe", response.getCanSubscribe());
             String jsonPayload = new Gson().toJson(map);
             org.apache.axis2.context.MessageContext axisMsgCtx = ((Axis2MessageContext) context).getAxis2MessageContext();
             JsonUtil.getNewJsonPayload(axisMsgCtx, jsonPayload, true, true);
@@ -97,7 +75,7 @@ public class PublishMediator extends AbstractConnector {
         } catch (StatusRuntimeException e) {
             handleException(format("Error in PublishMediator: code %s , cause: %s ", e.getStatus().getCode().name(), e.getStatus().getDescription()), context);
         } catch (AxisFault e) {
-            handleException("Error in PublishMediator:", e, context);
+            handleException("Error in GetTopicMediator:", e, context);
         }
     }
 }

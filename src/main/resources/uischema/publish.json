@@ -34,33 +34,33 @@
                                         "type":"attribute",
                                         "value":{
                                             "name": "topic_name",
-                                            "displayName": "topic_name",
+                                            "displayName": "Topic Name",
                                             "inputType": "stringOrExpression",
                                             "defaultValue": "",
                                             "required": "true",
-                                            "helpTip": "topic_name"
+                                            "helpTip": "Topic to publish on"
                                         }
                                     },
                                     {
                                         "type":"attribute",
                                         "value":{
                                             "name": "events",
-                                            "displayName": "events",
+                                            "displayName": "Events",
                                             "inputType": "stringOrExpression",
                                             "defaultValue": "",
                                             "required": "true",
-                                            "helpTip": "events"
+                                            "helpTip": "Batch of ProducerEvent(s) to send"
                                         }
                                     },
                                     {
                                         "type":"attribute",
                                         "value":{
                                             "name": "auth_refresh",
-                                            "displayName": "auth_refresh",
+                                            "displayName": "Auth Refresh",
                                             "inputType": "stringOrExpression",
                                             "defaultValue": "",
                                             "required": "false",
-                                            "helpTip": "auth_refresh"
+                                            "helpTip": "For internal Salesforce use only"
                                         }
                                     }
                             ]

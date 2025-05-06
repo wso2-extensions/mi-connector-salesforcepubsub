@@ -16,7 +16,7 @@
 *  under the License.
 */
 
-package org.wso2.carbon.sfpubsubconnector;
+package org.wso2.integration.salesforcepubsub;
 
 import io.grpc.CallOptions;
 import io.grpc.Channel;

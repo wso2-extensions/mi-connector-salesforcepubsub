@@ -34,11 +34,11 @@
                                         "type":"attribute",
                                         "value":{
                                             "name": "topic_name",
-                                            "displayName": "topic_name",
+                                            "displayName": "Topic Name",
                                             "inputType": "stringOrExpression",
                                             "defaultValue": "",
                                             "required": "true",
-                                            "helpTip": "topic_name"
+                                            "helpTip": "The name of the topic to retrieve"
                                         }
                                     }
                             ]

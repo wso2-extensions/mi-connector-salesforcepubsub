@@ -6,7 +6,7 @@
     <!-- Possibly an In mediator or other mediators that read the inbound request -->
         <!-- Initiate Connection -->
 
-    <class name="org.wso2.carbon.sfpubsubconnector.GetSchemaMediator">
+    <class name="org.wso2.integration.salesforcepubsub.GetSchemaMediator">
         <property name="schema_id" expression="$func:schema_id"/>
     </class>
 </sequence>

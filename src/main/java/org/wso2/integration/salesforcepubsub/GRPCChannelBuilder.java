@@ -15,7 +15,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wso2.carbon.sfpubsubconnector;
+package org.wso2.integration.salesforcepubsub;
 
 import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
@@ -26,7 +26,7 @@ import org.apache.synapse.util.InlineExpressionUtil;
 import org.json.JSONArray;
 import org.wso2.carbon.connector.core.AbstractConnector;
 import org.wso2.carbon.connector.core.ConnectException;
-import org.wso2.carbon.sfpubsubconnector.BasicAuthLogin.LoginResponse;
+import org.wso2.integration.salesforcepubsub.BasicAuthLogin.LoginResponse;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;

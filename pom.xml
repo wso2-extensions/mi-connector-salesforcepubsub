@@ -23,7 +23,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <groupId>org.wso2.mi.connector</groupId>
+    <groupId>org.wso2.integration.connector</groupId>
     <artifactId>mi-connector-salesforcepubsub</artifactId>
     <version>0.1.0</version>
 

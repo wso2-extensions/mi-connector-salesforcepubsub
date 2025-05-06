@@ -6,7 +6,7 @@
     <!-- Possibly an In mediator or other mediators that read the inbound request -->
         <!-- Initiate Connection -->
 
-    <class name="org.wso2.carbon.sfpubsubconnector.GetTopicMediator">
+    <class name="org.wso2.integration.salesforcepubsub.GetTopicMediator">
         <property name="topic_name" expression="$func:topic_name"/>
     </class>
 </sequence>

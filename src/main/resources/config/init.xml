@@ -29,7 +29,7 @@
     <parameter name="tlsEnabled" description="TLS channel" />
     <parameter name="blocking" description="Whether to use blocking transport"/>
     <sequence>
-    <class name="org.wso2.carbon.sfpubsubconnector.GRPCChannelBuilder">
+    <class name="org.wso2.integration.salesforcepubsub.GRPCChannelBuilder">
         <property name="name" expression="$func:name" />
         <property name="tlsEnabled" expression="$func:tlsEnabled" />
         <property name="server" expression="$func:server" />

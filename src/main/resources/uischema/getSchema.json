@@ -34,11 +34,11 @@
                                         "type":"attribute",
                                         "value":{
                                             "name": "schema_id",
-                                            "displayName": "schema_id",
+                                            "displayName": "Schema ID",
                                             "inputType": "stringOrExpression",
                                             "defaultValue": "",
                                             "required": "true",
-                                            "helpTip": "schema_id"
+                                            "helpTip": "Topic schema ID for publishing generic events."
                                         }
                                     }
                             ]

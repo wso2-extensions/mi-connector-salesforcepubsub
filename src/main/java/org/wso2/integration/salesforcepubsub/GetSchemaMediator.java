@@ -16,12 +16,12 @@
  *  under the License.
  */
 
-package org.wso2.carbon.sfpubsubconnector;
+package org.wso2.integration.salesforcepubsub;
 
 import com.salesforce.eventbus.protobuf.PubSubProto;
 import com.salesforce.eventbus.protobuf.PubSubGrpc;
-import com.salesforce.eventbus.protobuf.TopicRequest;
-import com.salesforce.eventbus.protobuf.TopicInfo;
+import com.salesforce.eventbus.protobuf.SchemaRequest;
+import com.salesforce.eventbus.protobuf.SchemaInfo;
 
 import com.google.gson.Gson;
 
@@ -38,35 +38,32 @@ import org.wso2.carbon.connector.core.AbstractConnector;
 
 import static java.lang.String.format;
 
-public class GetTopicMediator extends AbstractConnector {
-    private String topic_name;
+public class GetSchemaMediator extends AbstractConnector {
+    private String schema_id;
 
-    public void setTopic_name(String topic_name) {
-        this.topic_name = topic_name;
+    public void setSchema_id(String schema_id) {
+        this.schema_id = schema_id;
     }
 
-    public String getTopic_name() {
-        return topic_name;
+    public String getSchema_id() {
+        return schema_id;
     }
 
     @Override
     public void connect(MessageContext context) {
         try {
 
-            TopicRequest request = TopicRequest.newBuilder()
-                    .setTopicName(topic_name)
+            SchemaRequest request = SchemaRequest.newBuilder()
+                    .setSchemaId(schema_id)
                     .build();
 
             com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub stub = (com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub) context.getProperty("stub");
 
-            TopicInfo response = stub.getTopic(request);
+            SchemaInfo response = stub.getSchema(request);
             Map<String, Object> map = new HashMap<>();
-            map.put("tenant_guid", response.getTenantGuid());
-            map.put("can_publish", response.getCanPublish());
             map.put("rpc_id", response.getRpcId());
-            map.put("topic_name", response.getTopicName());
+            map.put("schema_json", response.getSchemaJson());
             map.put("schema_id", response.getSchemaId());
-            map.put("can_subscribe", response.getCanSubscribe());
             String jsonPayload = new Gson().toJson(map);
             org.apache.axis2.context.MessageContext axisMsgCtx = ((Axis2MessageContext) context).getAxis2MessageContext();
             JsonUtil.getNewJsonPayload(axisMsgCtx, jsonPayload, true, true);
@@ -75,7 +72,7 @@ public class GetTopicMediator extends AbstractConnector {
         } catch (StatusRuntimeException e) {
             handleException(format("Error in PublishMediator: code %s , cause: %s ", e.getStatus().getCode().name(), e.getStatus().getDescription()), context);
         } catch (AxisFault e) {
-            handleException("Error in GetTopicMediator:", e, context);
+            handleException("Error in GetSchemaMediator:", e, context);
         }
     }
 }

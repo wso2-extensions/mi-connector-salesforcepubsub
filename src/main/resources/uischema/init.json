@@ -74,11 +74,11 @@
                                         "name": "authType",
                                         "displayName": "Authentication Type",
                                         "inputType": "combo",
-                                        "defaultValue": "No Auth",
+                                        "defaultValue": "None",
                                         "required": "true",
                                         "helpTip": "The authentication type for the connection.",
                                         "comboValues": [
-                                            "No Auth",
+                                            "None",
                                             "Basic Auth"
                                         ]
                                     }
@@ -127,7 +127,7 @@
                                         "tableKey": "propertyName",
                                         "tableValue": "propertyValue",
                                         "helpTip": "Add headers to the connection in JSON format.",
-                                        "enableCondition": [{"authType":"No Auth"}],
+                                        "enableCondition": [{"authType":"None"}],
                                         "elements": [
                                             {
                                                 "type": "attribute",

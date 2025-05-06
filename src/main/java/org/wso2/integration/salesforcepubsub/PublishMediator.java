@@ -16,15 +16,16 @@
  *  under the License.
  */
 
-package org.wso2.carbon.sfpubsubconnector;
+package org.wso2.integration.salesforcepubsub;
 
 import com.salesforce.eventbus.protobuf.PubSubProto;
 import com.salesforce.eventbus.protobuf.PubSubGrpc;
-import com.salesforce.eventbus.protobuf.SchemaRequest;
-import com.salesforce.eventbus.protobuf.SchemaInfo;
+import com.salesforce.eventbus.protobuf.PublishRequest;
+import com.salesforce.eventbus.protobuf.PublishResponse;
 
 import com.google.gson.Gson;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,32 +39,56 @@ import org.wso2.carbon.connector.core.AbstractConnector;
 
 import static java.lang.String.format;
 
-public class GetSchemaMediator extends AbstractConnector {
-    private String schema_id;
+public class PublishMediator extends AbstractConnector {
+    private String topic_name;
+    private com.salesforce.eventbus.protobuf.ProducerEvent[] events;
+    private String auth_refresh;
 
-    public void setSchema_id(String schema_id) {
-        this.schema_id = schema_id;
+    public void setTopic_name(String topic_name) {
+        this.topic_name = topic_name;
     }
 
-    public String getSchema_id() {
-        return schema_id;
+    public String getTopic_name() {
+        return topic_name;
+    }
+
+    public void setEvents(String events) {
+        this.events = (com.salesforce.eventbus.protobuf.ProducerEvent[]) TypeConverter.convert(events, com.salesforce.eventbus.protobuf.ProducerEvent[].class);
+    }
+
+    public com.salesforce.eventbus.protobuf.ProducerEvent[] getEvents() {
+        return events;
+    }
+
+    public void setAuth_refresh(String auth_refresh) {
+        if (auth_refresh == null) {
+            auth_refresh = null;
+        }
+        this.auth_refresh = auth_refresh;
+    }
+
+    public String getAuth_refresh() {
+        return auth_refresh;
     }
 
     @Override
     public void connect(MessageContext context) {
         try {
-
-            SchemaRequest request = SchemaRequest.newBuilder()
-                    .setSchemaId(schema_id)
-                    .build();
+            PublishRequest.Builder requestBuilder = PublishRequest.newBuilder()
+                    .setTopicName(topic_name)
+                    .addAllEvents(Arrays.asList(events));
+            if (auth_refresh != null) {
+                requestBuilder.setAuthRefresh(auth_refresh);
+            }
+            PublishRequest request = requestBuilder.build();
 
             com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub stub = (com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub) context.getProperty("stub");
 
-            SchemaInfo response = stub.getSchema(request);
+            PublishResponse response = stub.publish(request);
             Map<String, Object> map = new HashMap<>();
             map.put("rpc_id", response.getRpcId());
-            map.put("schema_json", response.getSchemaJson());
             map.put("schema_id", response.getSchemaId());
+            map.put("results", response.getResultsList());
             String jsonPayload = new Gson().toJson(map);
             org.apache.axis2.context.MessageContext axisMsgCtx = ((Axis2MessageContext) context).getAxis2MessageContext();
             JsonUtil.getNewJsonPayload(axisMsgCtx, jsonPayload, true, true);
@@ -72,7 +97,7 @@ public class GetSchemaMediator extends AbstractConnector {
         } catch (StatusRuntimeException e) {
             handleException(format("Error in PublishMediator: code %s , cause: %s ", e.getStatus().getCode().name(), e.getStatus().getDescription()), context);
         } catch (AxisFault e) {
-            handleException("Error in GetSchemaMediator:", e, context);
+            handleException("Error in PublishMediator:", e, context);
         }
     }
 }
