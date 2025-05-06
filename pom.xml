@@ -25,15 +25,15 @@
 
     <groupId>org.wso2.mi.connector</groupId>
     <artifactId>mi-connector-salesforcepubsub</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
 
-    <name>WSO2 Micro Integrator - pubsub Connector</name>
+    <name>WSO2 Micro Integrator - Salesforce PubSub Connector</name>
     <url>http://wso2.org</url>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-            <connector.name>pubsub</connector.name>
+            <connector.name>salesforcepubsub</connector.name>
             <synapse.version>4.0.0-wso2v154</synapse.version>
             <carbon.mediation.version>4.7.175</carbon.mediation.version>
         </properties>

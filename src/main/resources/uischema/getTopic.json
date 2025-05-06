@@ -1,5 +1,5 @@
 {
-    "connectorName": "pubsub",
+    "connectorName": "salesforcePubSub",
     "operationName": "getTopic",
     "title": "GetTopic",
     "help": "GetTopic",
@@ -17,9 +17,9 @@
                           "displayName": "Connection",
                           "inputType": "connection",
                           "allowedConnectionTypes": [
-                            "pubsub"
+                            "salesforcePubSub"
                           ],
-                          "defaultType": "connection.pubsub",
+                          "defaultType": "connection.salesforcePubSub",
                           "defaultValue": "",
                           "required": "true",
                           "helpTip": "Connection to be used"

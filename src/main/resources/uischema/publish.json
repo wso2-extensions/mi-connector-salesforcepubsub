@@ -1,5 +1,5 @@
 {
-    "connectorName": "pubsub",
+    "connectorName": "salesforcePubSub",
     "operationName": "publish",
     "title": "Publish",
     "help": "Publish",
@@ -17,9 +17,9 @@
                           "displayName": "Connection",
                           "inputType": "connection",
                           "allowedConnectionTypes": [
-                            "pubsub"
+                            "salesforcePubSub"
                           ],
-                          "defaultType": "connection.pubsub",
+                          "defaultType": "connection.salesforcePubSub",
                           "defaultValue": "",
                           "required": "true",
                           "helpTip": "Connection to be used"
@@ -59,7 +59,7 @@
                                             "displayName": "auth_refresh",
                                             "inputType": "stringOrExpression",
                                             "defaultValue": "",
-                                            "required": "true",
+                                            "required": "false",
                                             "helpTip": "auth_refresh"
                                         }
                                     }

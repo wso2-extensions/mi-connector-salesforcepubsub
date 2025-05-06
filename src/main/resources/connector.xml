@@ -20,10 +20,10 @@
 <!-- Generated on $timestamp -->
 
 <connector>
-    <component name="pubsub" package="org.wso2.carbon.connector">
+    <component name="salesforcePubSub" package="org.wso2.carbon.connector">
         <dependency component="config"/>
         <dependency component="functions"/>
-        <description>WSO2 pubsub Connector Library</description>
+        <description>WSO2 Salesforce PubSub Connector Library</description>
     </component>
     <icon>icon/icon-small.png</icon>
 </connector>

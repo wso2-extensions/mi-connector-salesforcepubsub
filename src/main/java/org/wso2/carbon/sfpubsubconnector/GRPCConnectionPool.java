@@ -15,7 +15,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wso2.carbon.pubsubconnector;
+package org.wso2.carbon.sfpubsubconnector;
 
 import io.grpc.ManagedChannel;
 
@@ -28,6 +28,7 @@ public class GRPCConnectionPool {
     private static volatile GRPCConnectionPool INSTANCE;
     private final ConcurrentHashMap<String, GRPCConnection> connectionPool;
     private static final ReentrantLock initLock = new ReentrantLock();
+
     private GRPCConnectionPool() {
         this.connectionPool = new ConcurrentHashMap<>();
     }
@@ -48,6 +49,7 @@ public class GRPCConnectionPool {
         }
         return INSTANCE;
     }
+
     public GRPCConnection getConnection(String key) {
         if (connectionPool.containsKey(key)) {
             return connectionPool.get(key);
@@ -62,6 +64,7 @@ public class GRPCConnectionPool {
     public void addConnection(String key, GRPCConnection connection) {
         connectionPool.put(key, connection);
     }
+
     public static class GRPCConnection {
         private final String connectionName;
         private final Object stub;

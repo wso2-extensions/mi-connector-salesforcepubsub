@@ -1,21 +1,21 @@
 /*
-*  Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com).
-*
-*  WSO2 LLC. licenses this file to you under the Apache License,
-*  Version 2.0 (the "License"); you may not use this file except
-*  in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing,
-*  software distributed under the License is distributed on an
-*  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-*  KIND, either express or implied.  See the License for the
-*  specific language governing permissions and limitations
-*  under the License.
-*/
-package org.wso2.carbon.pubsubconnector;
+ *  Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com).
+ *
+ *  WSO2 LLC. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.wso2.carbon.sfpubsubconnector;
 
 import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
@@ -26,6 +26,7 @@ import org.apache.synapse.util.InlineExpressionUtil;
 import org.json.JSONArray;
 import org.wso2.carbon.connector.core.AbstractConnector;
 import org.wso2.carbon.connector.core.ConnectException;
+import org.wso2.carbon.sfpubsubconnector.BasicAuthLogin.LoginResponse;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -47,6 +48,7 @@ public class GRPCChannelBuilder extends AbstractConnector {
     private static final String GRPC_CHANNEL = "grpc_channel";
     private static String name;
     private static boolean tlsEnabled;
+    private static String securityToken;
 
     public static String getServer() {
         return server;
@@ -115,17 +117,26 @@ public class GRPCChannelBuilder extends AbstractConnector {
 
 
     public static void setTlsEnabled(String tlsEnabled) {
-           boolean myBoolean = Boolean.parseBoolean(tlsEnabled);
-           GRPCChannelBuilder.tlsEnabled = myBoolean;
+        boolean myBoolean = Boolean.parseBoolean(tlsEnabled);
+        GRPCChannelBuilder.tlsEnabled = myBoolean;
     }
+
     public static boolean isTLS() {
         return tlsEnabled;
+    }
+
+    public static void setSecurityToken(String securityToken) {
+        GRPCChannelBuilder.securityToken = securityToken;
+    }
+
+    public static String getSecurityToken() {
+        return securityToken;
     }
 
     @Override
     public void connect(MessageContext messageContext) {
         GRPCConnectionPool instance = GRPCConnectionPool.getInstance();
-        if(instance.getConnection(getName()) != null) {
+        if (instance.getConnection(getName()) != null) {
             GRPCConnectionPool.GRPCConnection connection = instance.getConnection(getName());
             ConnectivityState state = connection.getChannel().getState(true);
             if (state != ConnectivityState.SHUTDOWN && state != ConnectivityState.TRANSIENT_FAILURE) {
@@ -145,26 +156,32 @@ public class GRPCChannelBuilder extends AbstractConnector {
 
             int portInt = Integer.parseInt(getPort());
             String target = getServer() + ":" + portInt;
-            Metadata metadata = getGRPCHeaders() != null ? getHeaderMetadata(messageContext): null;
-
-            ManagedChannel channel = createChannel(target, isTLS(), metadata);
-            messageContext.setProperty(GRPC_CHANNEL, channel);
-
+            ManagedChannel channel;
             com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub stub;
-            if ( getUsername() != null && getPassword() != null) {
-                BasicCallCredentials basicAuthCredential = new BasicCallCredentials(getUsername(), getPassword());
-                stub = com.salesforce.eventbus.protobuf.PubSubGrpc.newBlockingStub(channel).withCallCredentials(basicAuthCredential);
-            } else if (getBearerToken() != null) {
-                TokenCallCredentials tokenCredential = new TokenCallCredentials(getBearerToken());
-                stub = com.salesforce.eventbus.protobuf.PubSubGrpc.newBlockingStub(channel).withCallCredentials(tokenCredential);
+            if (getUsername() != null && getPassword() != null) {
+                BasicAuthLogin basicAuthLogin = new BasicAuthLogin();
+                LoginResponse loginResponse = basicAuthLogin.login(getUsername(), getPassword(), getSecurityToken(),
+                        "https://login.salesforce.com/services/Soap/u/61.0");
+                Metadata metadata = new Metadata();
+                metadata.put(Metadata.Key.of("accessToken", Metadata.ASCII_STRING_MARSHALLER), loginResponse.sessionId);
+                metadata.put(Metadata.Key.of("instanceUrl", Metadata.ASCII_STRING_MARSHALLER), loginResponse.instanceUrl);
+                metadata.put(Metadata.Key.of("tenantId", Metadata.ASCII_STRING_MARSHALLER), loginResponse.tenantId);
+
+                channel = createChannel(target, isTLS(), metadata);
+                stub = com.salesforce.eventbus.protobuf.PubSubGrpc.newBlockingStub(channel);
             } else {
+                Metadata metadata = getGRPCHeaders() != null ? getHeaderMetadata(messageContext) : null;
+
+                channel = createChannel(target, isTLS(), metadata);
+                messageContext.setProperty(GRPC_CHANNEL, channel);
                 stub = com.salesforce.eventbus.protobuf.PubSubGrpc.newBlockingStub(channel);
             }
+
             messageContext.setProperty("stub", stub);
             GRPCConnectionPool.GRPCConnection connection = new GRPCConnectionPool.GRPCConnection.Builder()
                     .connectionName(getName())
-                            .stub(stub)
-                                    .channel(channel).build();
+                    .stub(stub)
+                    .channel(channel).build();
             instance.addConnection(getName(), connection);
 
             messageContext.setProperty(GRPC_CHANNEL, channel);
@@ -202,24 +219,24 @@ public class GRPCChannelBuilder extends AbstractConnector {
     /**
      * Creates a gRPC channel based on the provided parameters.
      *
-     * @param target The target server address in the format "host:port"
+     * @param target    The target server address in the format "host:port"
      * @param useSecure Whether to use transport security (TLS)
-     * @param metadata Optional metadata for the channel (can be null)
+     * @param metadata  Optional metadata for the channel (can be null)
      * @return A configured ManagedChannel
      */
     private ManagedChannel createChannel(String target, boolean useSecure, Metadata metadata) throws ConnectException {
         try {
             if (useSecure && metadata != null) {
-                LOGGER.info("gRPC secure channel is created with metadata:"+ target);
-                return  ManagedChannelBuilder.forTarget(target)
+                LOGGER.info("gRPC secure channel is created with metadata:" + target);
+                return ManagedChannelBuilder.forTarget(target)
                         .useTransportSecurity()
                         .intercept(new MetadataInterceptor(metadata))
                         .keepAliveTime(30, TimeUnit.SECONDS)
                         .keepAliveTimeout(10, TimeUnit.SECONDS)
                         .keepAliveWithoutCalls(true)
                         .build();
-            } else if (useSecure){
-                LOGGER.info("gRPC secure channel is created:"+ target);
+            } else if (useSecure) {
+                LOGGER.info("gRPC secure channel is created:" + target);
                 return ManagedChannelBuilder.forTarget(target)
                         .useTransportSecurity()
                         .keepAliveTime(30, TimeUnit.SECONDS)
@@ -227,7 +244,7 @@ public class GRPCChannelBuilder extends AbstractConnector {
                         .keepAliveWithoutCalls(true)
                         .build();
             } else if (metadata != null) {
-                LOGGER.info("gRPC channel is created with metadata:"+ target);
+                LOGGER.info("gRPC channel is created with metadata:" + target);
                 return ManagedChannelBuilder.forTarget(target)
                         .usePlaintext()
                         .intercept(new MetadataInterceptor(metadata))
@@ -236,7 +253,7 @@ public class GRPCChannelBuilder extends AbstractConnector {
                         .keepAliveWithoutCalls(true)
                         .build();
             } else {
-                LOGGER.info("gRPC channel is created:"+ target);
+                LOGGER.info("gRPC channel is created:" + target);
                 return ManagedChannelBuilder.forTarget(target)
                         .usePlaintext()
                         .keepAliveTime(30, TimeUnit.SECONDS)
