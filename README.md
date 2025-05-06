@@ -1,4 +1,4 @@
-# pubsub Connector
+# mi-connector-salesforcepubsub
 
 ### Compatibility
 
