@@ -25,7 +25,7 @@
 
     <groupId>org.wso2.integration.connector</groupId>
     <artifactId>mi-connector-salesforcepubsub</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <name>WSO2 Micro Integrator - Salesforce PubSub Connector</name>
     <url>http://wso2.org</url>
@@ -33,10 +33,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-            <connector.name>salesforcepubsub</connector.name>
-            <synapse.version>4.0.0-wso2v154</synapse.version>
-            <carbon.mediation.version>4.7.175</carbon.mediation.version>
-        </properties>
+        <connector.name>salesforcepubsub</connector.name>
+        <synapse.version>4.0.0-wso2v154</synapse.version>
+        <carbon.mediation.version>4.7.175</carbon.mediation.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -102,8 +102,7 @@
 
     </dependencies>
     <scm>
-        <connection>scm:git:https://github.com/wso2-extensions/mi-connector-salesforcepubsub.git
-        </connection>
+        <connection>scm:git:https://github.com/wso2-extensions/mi-connector-salesforcepubsub.git</connection>
         <url>https://github.com/wso2-extensions/mi-connector-salesforcepubsub.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/mi-connector-salesforcepubsub
         </developerConnection>
