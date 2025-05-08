@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "pubsub GetTopic Operation Response Schema",
+    "description": "Schema representing the output of the GetTopic operation in pubsub",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "description": "Payload of the API response.",
+            "additionalProperties": true,
+            "properties": {
+                "topic_name": {
+                    "type": "string"
+                },
+                "schema_id": {
+                    "type": "string"
+                },
+                "tenant_guid": {
+                    "type": "string"
+                },
+                "can_subscribe": {
+                    "type": "boolean"
+                },
+                "can_publish": {
+                    "type": "boolean"
+                },
+                "rpc_id": {
+                    "type": "string"
+                }
+            }
+        },
+      "attributes": {
+        "type": "object",
+        "description": "Metadata about the operation.",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code of the API response.",
+            "minimum": 100,
+            "maximum": 599
+          }
+        },
+        "required": ["statusCode"],
+        "additionalProperties": false
+      },
+      "headers": {
+        "type": "object",
+        "description": "HTTP headers of the API response.",
+        "additionalProperties": false
+      }
+    },
+    "required": ["payload", "attributes", "headers"],
+    "additionalProperties": false
+  }
