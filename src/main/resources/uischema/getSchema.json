@@ -37,7 +37,7 @@
                                             "inputType": "stringOrExpression",
                                             "defaultValue": "",
                                             "required": "true",
-                                            "helpTip": "Topic schema ID for publishing generic events."
+                                            "helpTip": "Schema Id for this event."
                                         }
                                     }
                             ]
