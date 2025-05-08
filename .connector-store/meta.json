@@ -1,0 +1,45 @@
+{
+  "name": "Salesforce Pub/Sub",
+  "owner": "WSO2",
+  "product": "MI",
+  "category": "Communication",
+  "documentationUrl": "",
+  "mavenGroupId": "org.wso2.integration.connector",
+  "mavenArtifactId": "mi-connector-salesforcepubsub",
+  "description": "The Salesforce Pub/Sub connector allows you to publish and subscribe to events in Salesforce. It enables you to integrate Salesforce with other systems by sending and receiving messages through the Pub/Sub API. This connector provides operations for publishing events, and subscribing to topics.",
+  "status": "Active",
+  "rank": 94,
+  "type": "Connector",
+  "labels": [
+    "communication",
+    "salesforce",
+    "pubsub"
+  ],
+  "releases": [
+    {
+      "tagName": "v0.1.0",
+      "products": [
+        "MI 4.4.0"
+      ],
+      "operations": [
+        {
+          "name": "Get Schema",
+          "description": "This is getSchema operation.",
+          "isHidden": false
+        },
+        {
+          "name": "Get Topic",
+          "description": "This is getTopic operation.",
+          "isHidden": false
+        },
+        {
+          "name": "Publish",
+          "description": "This is publish operation.",
+          "isHidden": false
+        }
+      ],
+      "connections": [],
+      "isHidden": false
+    }
+  ]
+}
