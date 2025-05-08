@@ -65,7 +65,7 @@
                                         "inputType": "checkbox",
                                         "defaultValue": "false",
                                         "required": "false",
-                                        "helpTip": "The port for the root URL."
+                                        "helpTip": "Enabling the secure channel using TLS"
                                     }
                                 },
                                 {
