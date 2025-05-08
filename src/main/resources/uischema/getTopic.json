@@ -3,7 +3,6 @@
     "operationName": "getTopic",
     "title": "GetTopic",
     "help": "GetTopic",
-    "markdownDescription": "# Summary\n \n# Prerequisites\n\n# Input\n\n# Output\n\n# Error\n\n# Example\n\n# Notes\n\n",
     "elements": [
         {
             "type": "attributeGroup",

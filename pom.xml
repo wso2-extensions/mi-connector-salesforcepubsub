@@ -181,7 +181,7 @@
         <snapshotRepository>
             <id>wso2.snapshots</id>
             <name>Apache Snapshot Repository</name>
-            <url>https://maven.wso2.org/nexus/content/repositories/snapshots/</url>
+            <url>https://maven.wso2.org/nexus/content/repositories/releases/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

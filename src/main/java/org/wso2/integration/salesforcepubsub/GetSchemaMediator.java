@@ -39,20 +39,10 @@ import org.wso2.carbon.connector.core.AbstractConnector;
 import static java.lang.String.format;
 
 public class GetSchemaMediator extends AbstractConnector {
-    private String schema_id;
-
-    public void setSchema_id(String schema_id) {
-        this.schema_id = schema_id;
-    }
-
-    public String getSchema_id() {
-        return schema_id;
-    }
-
     @Override
     public void connect(MessageContext context) {
         try {
-
+            String schema_id = (String) getParameter(context, "schema_id");
             SchemaRequest request = SchemaRequest.newBuilder()
                     .setSchemaId(schema_id)
                     .build();

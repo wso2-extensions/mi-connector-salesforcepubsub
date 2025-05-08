@@ -38,106 +38,24 @@ import java.util.logging.Logger;
 public class GRPCChannelBuilder extends AbstractConnector {
     private static final Logger LOGGER = Logger.getLogger(GRPCChannelBuilder.class.getName());
 
-    private static String server;
-    private static String port;
-    private static String headers;
-    private static String username;
-    private static String password;
-    private static String serverCrt;
-    private static String bearerToken;
     private static final String GRPC_CHANNEL = "grpc_channel";
-    private static String name;
-    private static boolean tlsEnabled;
-    private static String securityToken;
-
-    public static String getServer() {
-        return server;
-    }
-
-    public static void setServer(String server) {
-        GRPCChannelBuilder.server = server;
-    }
-
-    public static String getPort() {
-        return port;
-    }
-
-    public static void setPort(String port) {
-        GRPCChannelBuilder.port = port;
-    }
-
-
-    public static void setHeaders(String headersJson) {
-        GRPCChannelBuilder.headers = headersJson;
-    }
-
-    public static String getGRPCHeaders() {
-        return headers;
-    }
-
-    public static String getUsername() {
-        return username;
-    }
-
-    public static void setUsername(String username) {
-        GRPCChannelBuilder.username = username;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        GRPCChannelBuilder.password = password;
-    }
-
-    public static String getServerCrt() {
-        return serverCrt;
-    }
-
-    public static void setServerCrt(String serverCrt) {
-        GRPCChannelBuilder.serverCrt = serverCrt;
-    }
-
-    public static String getBearerToken() {
-        return bearerToken;
-    }
-
-    public static void setBearerToken(String bearerToken) {
-        GRPCChannelBuilder.bearerToken = bearerToken;
-    }
-
-    public static void setName(String name) {
-        GRPCChannelBuilder.name = name;
-    }
-
-    public static String getName() {
-        return name;
-    }
-
-
-    public static void setTlsEnabled(String tlsEnabled) {
-        boolean myBoolean = Boolean.parseBoolean(tlsEnabled);
-        GRPCChannelBuilder.tlsEnabled = myBoolean;
-    }
-
-    public static boolean isTLS() {
-        return tlsEnabled;
-    }
-
-    public static void setSecurityToken(String securityToken) {
-        GRPCChannelBuilder.securityToken = securityToken;
-    }
-
-    public static String getSecurityToken() {
-        return securityToken;
-    }
 
     @Override
     public void connect(MessageContext messageContext) {
+        String server = (String) getParameter(messageContext, "server");
+        String port = (String) getParameter(messageContext, "port");
+        String headers = (String) getParameter(messageContext, "headers");
+        String username = (String) getParameter(messageContext, "username");
+        String password = (String) getParameter(messageContext, "password");
+        String name = (String) getParameter(messageContext, "name");
+        String tlsEnabledString = (String) getParameter(messageContext, "tlsEnabled");
+        Boolean tlsEnabled = Boolean.parseBoolean(tlsEnabledString);
+        String securityToken = (String) getParameter(messageContext, "securityToken");
+
+
         GRPCConnectionPool instance = GRPCConnectionPool.getInstance();
-        if (instance.getConnection(getName()) != null) {
-            GRPCConnectionPool.GRPCConnection connection = instance.getConnection(getName());
+        if (instance.getConnection(name) != null) {
+            GRPCConnectionPool.GRPCConnection connection = instance.getConnection(name);
             ConnectivityState state = connection.getChannel().getState(true);
             if (state != ConnectivityState.SHUTDOWN && state != ConnectivityState.TRANSIENT_FAILURE) {
                 Object stubObject = connection.getStub();
@@ -146,53 +64,53 @@ public class GRPCChannelBuilder extends AbstractConnector {
                 messageContext.setProperty("stub", stub);
                 return;
             } else {
-                instance.removeConnection(getName());
+                instance.removeConnection(name);
             }
         }
         try {
-            if (getServer() == null || getPort() == null) {
+            if (server == null || port == null) {
                 handleException("Server or port cannot be null", messageContext);
             }
 
-            int portInt = Integer.parseInt(getPort());
-            String target = getServer() + ":" + portInt;
+            int portInt = Integer.parseInt(port);
+            String target = server + ":" + portInt;
             ManagedChannel channel;
             com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub stub;
-            if (getUsername() != null && getPassword() != null) {
+            if (username != null && password != null) {
                 BasicAuthLogin basicAuthLogin = new BasicAuthLogin();
-                LoginResponse loginResponse = basicAuthLogin.login(getUsername(), getPassword(), getSecurityToken(),
+                LoginResponse loginResponse = basicAuthLogin.login(username, password, securityToken,
                         "https://login.salesforce.com/services/Soap/u/61.0");
                 Metadata metadata = new Metadata();
                 metadata.put(Metadata.Key.of("accessToken", Metadata.ASCII_STRING_MARSHALLER), loginResponse.sessionId);
                 metadata.put(Metadata.Key.of("instanceUrl", Metadata.ASCII_STRING_MARSHALLER), loginResponse.instanceUrl);
                 metadata.put(Metadata.Key.of("tenantId", Metadata.ASCII_STRING_MARSHALLER), loginResponse.tenantId);
 
-                channel = createChannel(target, isTLS(), metadata);
+                channel = createChannel(target, tlsEnabled, metadata);
                 stub = com.salesforce.eventbus.protobuf.PubSubGrpc.newBlockingStub(channel);
             } else {
-                Metadata metadata = getGRPCHeaders() != null ? getHeaderMetadata(messageContext) : null;
+                Metadata metadata = headers != null ? getHeaderMetadata(messageContext, headers) : null;
 
-                channel = createChannel(target, isTLS(), metadata);
+                channel = createChannel(target, tlsEnabled, metadata);
                 messageContext.setProperty(GRPC_CHANNEL, channel);
                 stub = com.salesforce.eventbus.protobuf.PubSubGrpc.newBlockingStub(channel);
             }
 
             messageContext.setProperty("stub", stub);
             GRPCConnectionPool.GRPCConnection connection = new GRPCConnectionPool.GRPCConnection.Builder()
-                    .connectionName(getName())
+                    .connectionName(name)
                     .stub(stub)
                     .channel(channel).build();
-            instance.addConnection(getName(), connection);
+            instance.addConnection(name, connection);
 
             messageContext.setProperty(GRPC_CHANNEL, channel);
         } catch (NumberFormatException e) {
-            handleException("Invalid port number: " + getPort(), messageContext);
+            handleException("Invalid port number: " + port, messageContext);
         } catch (Exception e) {
             handleException("Failed to create gRPC channel", messageContext);
         }
     }
 
-    private static Metadata getHeaderMetadata(MessageContext messageContext) throws ConnectException {
+    private static Metadata getHeaderMetadata(MessageContext messageContext, String headers) throws ConnectException {
         // Extract metadata from JSON
         Metadata metadata = new Metadata();
         JSONArray headerSet;

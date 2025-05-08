@@ -39,18 +39,9 @@ import org.wso2.carbon.connector.core.AbstractConnector;
 import static java.lang.String.format;
 
 public class GetTopicMediator extends AbstractConnector {
-    private String topic_name;
-
-    public void setTopic_name(String topic_name) {
-        this.topic_name = topic_name;
-    }
-
-    public String getTopic_name() {
-        return topic_name;
-    }
-
     @Override
     public void connect(MessageContext context) {
+        String topic_name = (String) getParameter(context, "topic_name");
         try {
 
             TopicRequest request = TopicRequest.newBuilder()

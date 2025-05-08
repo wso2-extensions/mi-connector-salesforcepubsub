@@ -40,46 +40,18 @@ import org.wso2.carbon.connector.core.AbstractConnector;
 import static java.lang.String.format;
 
 public class PublishMediator extends AbstractConnector {
-    private String topic_name;
-    private com.salesforce.eventbus.protobuf.ProducerEvent[] events;
-    private String auth_refresh;
-
-    public void setTopic_name(String topic_name) {
-        this.topic_name = topic_name;
-    }
-
-    public String getTopic_name() {
-        return topic_name;
-    }
-
-    public void setEvents(String events) {
-        this.events = (com.salesforce.eventbus.protobuf.ProducerEvent[]) TypeConverter.convert(events, com.salesforce.eventbus.protobuf.ProducerEvent[].class);
-    }
-
-    public com.salesforce.eventbus.protobuf.ProducerEvent[] getEvents() {
-        return events;
-    }
-
-    public void setAuth_refresh(String auth_refresh) {
-        if (auth_refresh == null) {
-            auth_refresh = null;
-        }
-        this.auth_refresh = auth_refresh;
-    }
-
-    public String getAuth_refresh() {
-        return auth_refresh;
-    }
 
     @Override
     public void connect(MessageContext context) {
+        String topic_name = (String) getParameter(context, "topic_name");
+        String eventsString = (String) getParameter(context, "events");
+        com.salesforce.eventbus.protobuf.ProducerEvent[] events = (com.salesforce.eventbus.protobuf.ProducerEvent[])
+                TypeConverter.convert(eventsString, com.salesforce.eventbus.protobuf.ProducerEvent[].class);
+
         try {
             PublishRequest.Builder requestBuilder = PublishRequest.newBuilder()
                     .setTopicName(topic_name)
                     .addAllEvents(Arrays.asList(events));
-            if (auth_refresh != null) {
-                requestBuilder.setAuthRefresh(auth_refresh);
-            }
             PublishRequest request = requestBuilder.build();
 
             com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub stub = (com.salesforce.eventbus.protobuf.PubSubGrpc.PubSubBlockingStub) context.getProperty("stub");

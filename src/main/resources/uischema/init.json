@@ -115,7 +115,7 @@
                                         "inputType": "stringOrExpression",
                                         "defaultValue": "",
                                         "required": "true",
-                                        "helpTip": "The password for the root URL.",
+                                        "helpTip": "User's security token.",
                                         "enableCondition": [{"authType":"Basic Auth"}]
                                     }
                                 },

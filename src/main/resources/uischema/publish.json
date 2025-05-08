@@ -3,7 +3,6 @@
     "operationName": "publish",
     "title": "Publish",
     "help": "Publish",
-    "markdownDescription": "# Summary\n \n# Prerequisites\n\n# Input\n\n# Output\n\n# Error\n\n# Example\n\n# Notes\n\n",
     "elements": [
         {
             "type": "attributeGroup",
@@ -50,17 +49,6 @@
                                             "defaultValue": "",
                                             "required": "true",
                                             "helpTip": "Batch of ProducerEvent(s) to send"
-                                        }
-                                    },
-                                    {
-                                        "type":"attribute",
-                                        "value":{
-                                            "name": "auth_refresh",
-                                            "displayName": "Auth Refresh",
-                                            "inputType": "stringOrExpression",
-                                            "defaultValue": "",
-                                            "required": "false",
-                                            "helpTip": "For internal Salesforce use only"
                                         }
                                     }
                             ]

@@ -21,14 +21,17 @@
 <component name="functions" type="synapse/template">
     <subComponents>
         <component name="getSchema">
+            <displayName>Get Schema</displayName>
             <file>getSchema.xml</file>
             <description>This is grpc GetSchema operation.</description>
         </component>
         <component name="publish">
+            <displayName>Publish</displayName>
             <file>publish.xml</file>
             <description>This is grpc Publish operation.</description>
         </component>
         <component name="getTopic">
+            <displayName>Get Topic</displayName>
             <file>getTopic.xml</file>
             <description>This is grpc GetTopic operation.</description>
         </component>
