@@ -38,7 +38,12 @@
           "isHidden": false
         }
       ],
-      "connections": ["salesforcePubSub"],
+      "connections": [
+        {
+        "name": "salesforcePubSub",
+        "description": "Connection for Salesforce Pub/Sub API operations."
+        }
+      ],
       "isHidden": false
     }
   ]

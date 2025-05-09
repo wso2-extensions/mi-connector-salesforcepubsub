@@ -63,7 +63,7 @@
                                     "type":"attribute",
                                     "value":{
                                         "name": "overwriteBody",
-                                        "displayName": "Replace Message Body",
+                                        "displayName": "Overwrite Message Body",
                                         "inputType": "checkbox",
                                         "defaultValue": "false",
                                         "helpTip": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable).",
