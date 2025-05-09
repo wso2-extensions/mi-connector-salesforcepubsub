@@ -19,27 +19,8 @@
                     "type": "string"
                 }
             }
-        },
-      "attributes": {
-        "type": "object",
-        "description": "Metadata about the operation.",
-        "properties": {
-          "statusCode": {
-            "type": "integer",
-            "description": "HTTP status code of the API response.",
-            "minimum": 100,
-            "maximum": 599
-          }
-        },
-        "required": ["statusCode"],
-        "additionalProperties": false
-      },
-      "headers": {
-        "type": "object",
-        "description": "HTTP headers of the API response.",
-        "additionalProperties": false
-      }
+        }
     },
-    "required": ["payload", "attributes", "headers"],
+    "required": ["payload"],
     "additionalProperties": false
   }

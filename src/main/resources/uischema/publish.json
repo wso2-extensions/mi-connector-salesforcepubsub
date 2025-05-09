@@ -63,7 +63,7 @@
                                     "type":"attribute",
                                     "value":{
                                         "name": "responseVariable",
-                                        "displayName": "Output Variable Name",
+                                        "displayName": "Overwrite Variable Name",
                                         "inputType": "string",
                                         "deriveResponseVariable" : true,
                                         "required": "true",
