@@ -1,50 +1,183 @@
 {
-  "name": "Salesforce Pub/Sub",
-  "owner": "WSO2",
-  "product": "MI",
-  "category": "Communication",
-  "documentationUrl": "https://mi.docs.wso2.com/en/latest/reference/connectors/connectors-overview/",
-  "mavenGroupId": "org.wso2.integration.connector",
-  "mavenArtifactId": "mi-connector-salesforcepubsub",
-  "description": "The Salesforce Pub/Sub connector allows you to publish and subscribe to events in Salesforce. It enables you to integrate Salesforce with other systems by sending and receiving messages through the Pub/Sub API. This connector provides operations for publishing events, and subscribing to topics.",
-  "status": "Active",
-  "rank": 94,
-  "type": "Connector",
-  "labels": [
-    "communication",
-    "salesforce",
-    "pubsub"
-  ],
-  "releases": [
-    {
-      "tagName": "v0.1.2",
-      "products": [
-        "MI 4.4.0"
-      ],
-      "operations": [
+    "name": "Salesforce Pub/Sub",
+    "owner": "WSO2",
+    "product": "MI",
+    "category": "Communication",
+    "documentationUrl": "https://mi.docs.wso2.com/en/latest/reference/connectors/connectors-overview/",
+    "mavenGroupId": "org.wso2.integration.connector",
+    "mavenArtifactId": "mi-connector-salesforcepubsub",
+    "description": "The Salesforce Pub/Sub connector allows you to publish and subscribe to events in Salesforce. It enables you to integrate Salesforce with other systems by sending and receiving messages through the Pub/Sub API. This connector provides operations for publishing events, and subscribing to topics.",
+    "status": "Active",
+    "rank": 94,
+    "type": "Connector",
+    "labels": [
+        "communication",
+        "salesforce",
+        "pubsub"
+    ],
+    "releases": [
         {
-          "name": "Get Schema",
-          "description": "This is getSchema operation.",
-          "isHidden": false
-        },
-        {
-          "name": "Get Topic",
-          "description": "This is getTopic operation.",
-          "isHidden": false
-        },
-        {
-          "name": "Publish",
-          "description": "This is publish operation.",
-          "isHidden": false
+            "tagName": "v0.1.3",
+            "products": [
+                "MI 4.4.0"
+            ],
+            "operations": [
+                {
+                    "name": "getSchema",
+                    "description": "GetSchema",
+                    "params": [
+                        {
+                            "name": "schema_id",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Schema Id for this event."
+                        },
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
+                    "name": "publish",
+                    "description": "Publish",
+                    "params": [
+                        {
+                            "name": "topic_name",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Topic to publish on"
+                        },
+                        {
+                            "name": "events",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Batch of ProducerEvent(s) to send"
+                        },
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                },
+                {
+                    "name": "getTopic",
+                    "description": "GetTopic",
+                    "params": [
+                        {
+                            "name": "topic_name",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "The name of the topic to retrieve"
+                        },
+                        {
+                            "name": "responseVariable",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Name of the variable to which the output of the operation should be assigned"
+                        },
+                        {
+                            "name": "overwriteBody",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Replace the Message Body in Message Context with the output of the operation (This will remove the payload from the above variable)."
+                        }
+                    ],
+                    "isHidden": false
+                }
+            ],
+            "connections": [
+                {
+                    "name": "salesforcePubSub",
+                    "description": "salesforce pubSub connection",
+                    "params": [
+                        {
+                            "name": "connectionName",
+                            "type": "string",
+                            "required": true,
+                            "defaultValue": "salesforcePubSub_CONNECTION",
+                            "description": "The name for the pubsub connection."
+                        },
+                        {
+                            "name": "server",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "The service root URL."
+                        },
+                        {
+                            "name": "port",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "The port for the root URL."
+                        },
+                        {
+                            "name": "tlsEnabled",
+                            "type": "checkbox",
+                            "required": false,
+                            "defaultValue": "false",
+                            "description": "Enabling the secure channel using TLS"
+                        },
+                        {
+                            "name": "authType",
+                            "type": "combo",
+                            "required": true,
+                            "defaultValue": "None",
+                            "description": "The authentication type for the connection. Supported values: None, Basic Auth"
+                        },
+                        {
+                            "name": "username",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "The username for the connection."
+                        },
+                        {
+                            "name": "password",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "The password for the root URL."
+                        },
+                        {
+                            "name": "securityToken",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "User's security token."
+                        }
+                    ]
+                }
+            ]
         }
-      ],
-      "connections": [
-        {
-        "name": "salesforcePubSub",
-        "description": "Connection for Salesforce Pub/Sub API operations."
-        }
-      ],
-      "isHidden": false
-    }
-  ]
+    ]
 }
