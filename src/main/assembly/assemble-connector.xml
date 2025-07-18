@@ -31,6 +31,8 @@
             <directory>target/classes</directory>
             <outputDirectory></outputDirectory>
             <excludes>
+                <exclude>org/wso2/integration/salesforcepubsub/**</exclude>
+                <exclude>com/salesforce/eventbus/protobuf/**</exclude>
                 <exclude>**/metrics_module.xml</exclude>
                 <exclude>**/META-INF/*</exclude>
             </excludes>
