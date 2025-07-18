@@ -30,19 +30,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.grpc.StatusRuntimeException;
-import org.apache.axis2.AxisFault;
 import org.apache.synapse.MessageContext;
 
-import org.apache.synapse.commons.json.JsonUtil;
-import org.apache.synapse.core.axis2.Axis2MessageContext;
-import org.wso2.carbon.connector.core.AbstractConnector;
+import org.wso2.integration.connector.core.AbstractConnectorOperation;
 
 import static java.lang.String.format;
 
-public class PublishMediator extends AbstractConnector {
+public class PublishMediator extends AbstractConnectorOperation {
 
     @Override
-    public void connect(MessageContext context) {
+    public void execute(MessageContext context, String responseVariable, Boolean overwriteBody) {
         String topic_name = (String) getParameter(context, "topic_name");
         String eventsString = (String) getParameter(context, "events");
         com.salesforce.eventbus.protobuf.ProducerEvent[] events = (com.salesforce.eventbus.protobuf.ProducerEvent[])
@@ -62,14 +59,9 @@ public class PublishMediator extends AbstractConnector {
             map.put("schema_id", response.getSchemaId());
             map.put("results", response.getResultsList());
             String jsonPayload = new Gson().toJson(map);
-            org.apache.axis2.context.MessageContext axisMsgCtx = ((Axis2MessageContext) context).getAxis2MessageContext();
-            JsonUtil.getNewJsonPayload(axisMsgCtx, jsonPayload, true, true);
-            axisMsgCtx.setProperty(org.apache.axis2.Constants.Configuration.MESSAGE_TYPE, "application/json");
-            axisMsgCtx.setProperty(org.apache.axis2.Constants.Configuration.CONTENT_TYPE, "application/json");
+            handleConnectorResponse(context, responseVariable, overwriteBody, jsonPayload, null, null);
         } catch (StatusRuntimeException e) {
             handleException(format("Error in PublishMediator: code %s , cause: %s ", e.getStatus().getCode().name(), e.getStatus().getDescription()), context);
-        } catch (AxisFault e) {
-            handleException("Error in PublishMediator:", e, context);
         }
     }
 }
