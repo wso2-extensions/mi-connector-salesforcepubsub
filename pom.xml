@@ -23,7 +23,7 @@
 
     <groupId>org.wso2.integration.connector</groupId>
     <artifactId>mi-connector-salesforcepubsub</artifactId>
-    <version>0.1.4-SNAPSHOT</version>
+    <version>0.1.4</version>
 
     <name>WSO2 Micro Integrator - Salesforce PubSub Connector</name>
     <url>http://wso2.org</url>
@@ -147,7 +147,7 @@
         <url>https://github.com/wso2-extensions/mi-connector-salesforcepubsub.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/mi-connector-salesforcepubsub
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.1.4</tag>
     </scm>
     <build>
         <plugins>
@@ -239,9 +239,7 @@
                             <target>
                                 <echo message="Copying shaded JAR to connector/dependencies..." />
                                 <mkdir dir="${project.build.directory}/connector/dependencies" />
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      tofile="${project.build.directory}/connector/dependencies/${project.build.finalName}.jar"
-                                      failonerror="true" />
+                                <copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.build.directory}/connector/dependencies/${project.build.finalName}.jar" failonerror="true" />
                             </target>
                         </configuration>
                     </execution>
