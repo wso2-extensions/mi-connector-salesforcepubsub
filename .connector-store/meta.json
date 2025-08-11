@@ -17,21 +17,28 @@
     ],
     "releases": [
         {
-            "tagName": "v0.1.4",
+            "tagName": "v0.1.5",
             "products": [
                 "MI 4.4.0"
             ],
             "operations": [
                 {
-                    "name": "getSchema",
-                    "description": "GetSchema",
+                    "name": "publish",
+                    "description": "Publish",
                     "params": [
                         {
-                            "name": "schema_id",
+                            "name": "topic_name",
                             "type": "stringOrExpression",
                             "required": true,
                             "defaultValue": "",
-                            "description": "Schema Id for this event."
+                            "description": "Topic to publish on"
+                        },
+                        {
+                            "name": "events",
+                            "type": "stringOrExpression",
+                            "required": true,
+                            "defaultValue": "",
+                            "description": "Batch of ProducerEvent(s) to send"
                         },
                         {
                             "name": "responseVariable",
@@ -51,22 +58,15 @@
                     "isHidden": false
                 },
                 {
-                    "name": "publish",
-                    "description": "Publish",
+                    "name": "getSchema",
+                    "description": "GetSchema",
                     "params": [
                         {
-                            "name": "topic_name",
+                            "name": "schema_id",
                             "type": "stringOrExpression",
                             "required": true,
                             "defaultValue": "",
-                            "description": "Topic to publish on"
-                        },
-                        {
-                            "name": "events",
-                            "type": "stringOrExpression",
-                            "required": true,
-                            "defaultValue": "",
-                            "description": "Batch of ProducerEvent(s) to send"
+                            "description": "Schema Id for this event."
                         },
                         {
                             "name": "responseVariable",
