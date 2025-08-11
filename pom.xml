@@ -23,7 +23,7 @@
 
     <groupId>org.wso2.integration.connector</groupId>
     <artifactId>mi-connector-salesforcepubsub</artifactId>
-    <version>0.1.5-SNAPSHOT</version>
+    <version>0.1.5</version>
 
     <name>WSO2 Micro Integrator - Salesforce PubSub Connector</name>
     <url>http://wso2.org</url>
@@ -147,7 +147,7 @@
         <url>https://github.com/wso2-extensions/mi-connector-salesforcepubsub.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/mi-connector-salesforcepubsub
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.1.5</tag>
     </scm>
     <build>
         <plugins>
